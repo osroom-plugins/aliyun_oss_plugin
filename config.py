@@ -2,8 +2,8 @@
 
 __author__ = "Allen Woo"
 
-ACCESS_KEY = "P0hTLdalgdvSeyEK"
-SECRET_KEY = "oTlZjL99nwmjLjwYNITKuKeLtRZEtU"
+ACCESS_KEY = "EK"
+SECRET_KEY = "o"
 
 # 如果你的存储绑定的是自己的域名, 则开启, 即IS_CNAME改为True
 IS_CNAME = False
