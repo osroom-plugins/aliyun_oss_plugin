@@ -51,6 +51,33 @@ def alioss_upload(alioss, **kwargs):
     return result
 
 
+def alioss_save_file(alioss, **kwargs):
+    """
+    文件上传
+    :param kwargs:
+
+    localfile_path:要保存的本地文件路径
+    file_name:文件名, 如果带上"/"则会创建对应的子目录,如post-img/xxxx-xxx-xxx.jpg
+
+    :return:
+    """
+
+
+    filename = kwargs.get("file_name")
+    localfile_path = kwargs.get("localfile_path")
+
+
+    # 上传
+    with open(localfile_path, 'rb') as fileobj:
+        alioss.put_object(filename, fileobj)
+
+    # 删除本地临时文件
+    local_file_del(localfile_path)
+
+    result = {"key": filename, "type": "aliyun", "bucket_name": BUCKET_NAME}
+    return result
+
+
 def alioss_file_del(alioss, **kwargs):
 
     '''
@@ -60,12 +87,13 @@ def alioss_file_del(alioss, **kwargs):
 
     # path_obj:上传文件时返回的那个result格式的字典
     path_obj = kwargs.get("path_obj")
-    if not path_obj or "key" not in path_obj:
+    if isinstance(path_obj, dict) and "key" in path_obj:
+
+        alioss.delete_object(path_obj["key"])
+
+        return True
+    else:
         return False
-
-    alioss.delete_object(path_obj["key"])
-
-    return True
 
 
 def alioss_file_rename(alioss, **kwargs):
@@ -78,11 +106,13 @@ def alioss_file_rename(alioss, **kwargs):
     # path_obj:上传文件时返回的那个result格式的字典
     path_obj = kwargs.get("path_obj")
     new_filename = kwargs.get("new_filename")
-    if not path_obj or "key" not in path_obj or not new_filename:
-        return -1
+    if isinstance(path_obj, dict) and "key" in path_obj:
 
-    r = alioss.copy_object(BUCKET_NAME, path_obj["key"], new_filename)
-    print("拷贝文件状态", r)
+        alioss.copy_object(BUCKET_NAME, path_obj["key"], new_filename)
+
+        return True
+    else:
+        return False
 
 
 def get_file_url(**kwargs):
@@ -94,12 +124,10 @@ def get_file_url(**kwargs):
 
     # path_obj:上传文件时返回的那个result格式的字典
     path_obj = kwargs.get("path_obj")
-    if not path_obj or "key" not in path_obj:
-        return None
+    if isinstance(path_obj, dict) and "key" in path_obj:
+        if not DOMAIN:
+            raise Exception(gettext("Please configure the third-party file storage domain name"))
 
-    host = DOMAIN
-    if not host:
-        raise Exception(gettext("Please configure the third-party file storage domain name"))
-
-    url = "{}/{}".format(host, path_obj["key"])
-    return url
+        url = "{}/{}".format(DOMAIN, path_obj["key"])
+        return url
+    return None

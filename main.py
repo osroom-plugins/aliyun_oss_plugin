@@ -2,7 +2,7 @@
 import oss2
 from apps.plugins.aliyun_oss_plugin.config import ENDPOINT, BUCKET_NAME, IS_CNAME, TIME_OUT, ACCESS_KEY, SECRET_KEY
 from apps.plugins.aliyun_oss_plugin.upfile_cloud import alioss_upload, alioss_file_del, alioss_file_rename, \
-    get_file_url
+    get_file_url, alioss_save_file
 
 __author__ = "Allen Woo"
 auth = oss2.Auth(ACCESS_KEY, SECRET_KEY)
@@ -25,7 +25,8 @@ def main(**kwargs):
     '''
     if kwargs.get("action") == "upload":
         data = alioss_upload(alioss, **kwargs)
-
+    elif kwargs.get("action") == "save_file":
+        data = alioss_save_file(alioss, **kwargs)
     elif kwargs.get("action") == "delete":
         data = alioss_file_del(alioss, **kwargs)
 
