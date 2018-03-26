@@ -1,8 +1,7 @@
 # -*-coding:utf-8-*-
 from flask_babel import gettext
-from apps.core.utils.get_config import get_config
-from apps.plugins.aliyun_oss_plugin.config import BUCKET_NAME
-from apps.plugins.aliyun_oss_plugin.upfile_local import local_file_del, upload_to_local
+from apps.plugins.aliyun_oss_plugin.config import BUCKET_NAME, DOMAIN
+from apps.plugins.aliyun_oss_plugin.upfile_local import local_file_del, upload_to_local, fileup_base_64
 
 __author__ = "Allen Woo"
 
@@ -32,13 +31,13 @@ def alioss_upload(alioss, **kwargs):
     
     if is_base_64:
         # localfilepath要上传文件的本地路径, key上传到七牛后保存的文件名
-        localfile_path, key = upload_to_local(file=file, filename=filename,
-                                              file_format_name=file_format_name,
-                                              fetch_url=fetch_url, prefix=prefix)
+        localfile_path, key = fileup_base_64(file=file, file_name=filename,
+                                              file_format=file_format_name,
+                                             prefix=prefix)
     else:
         # localfilepath要上传文件的本地路径, key上传到七牛后保存的文件名
         localfile_path, key = upload_to_local(file=file, filename=filename,
-                                              file_format_name=file_format_name,
+                                              file_format=file_format_name,
                                               fetch_url=fetch_url, prefix=prefix)
 
     # 上传
@@ -48,7 +47,7 @@ def alioss_upload(alioss, **kwargs):
     # 删除本地临时文件
     local_file_del(localfile_path)
 
-    result = {"key": key, "type": "aliyun", "d": None, "bucket_var": BUCKET_NAME}
+    result = {"key": key, "type": "aliyun", "bucket_name": BUCKET_NAME}
     return result
 
 
@@ -61,11 +60,10 @@ def alioss_file_del(alioss, **kwargs):
 
     # path_obj:上传文件时返回的那个result格式的字典
     path_obj = kwargs.get("path_obj")
-    if not path_obj or "bucket_var" not in path_obj or "key" not in path_obj:
+    if not path_obj or "key" not in path_obj:
         return False
 
-    r = alioss.delete_object(path_obj["key"])
-    print("删除文件状态", r)
+    alioss.delete_object(path_obj["key"])
 
     return True
 
@@ -80,14 +78,14 @@ def alioss_file_rename(alioss, **kwargs):
     # path_obj:上传文件时返回的那个result格式的字典
     path_obj = kwargs.get("path_obj")
     new_filename = kwargs.get("new_filename")
-    if not path_obj or "bucket_var" not in path_obj or "key" not in path_obj or not new_filename:
+    if not path_obj or "key" not in path_obj or not new_filename:
         return -1
 
     r = alioss.copy_object(BUCKET_NAME, path_obj["key"], new_filename)
     print("拷贝文件状态", r)
 
 
-def get_file_path(alioss, **kwargs):
+def get_file_url(**kwargs):
 
     '''
     阿里云OSS上文件删除
@@ -96,10 +94,10 @@ def get_file_path(alioss, **kwargs):
 
     # path_obj:上传文件时返回的那个result格式的字典
     path_obj = kwargs.get("path_obj")
-    if not path_obj or "bucket_var" not in path_obj or "key" not in path_obj:
-        return -1
+    if not path_obj or "key" not in path_obj:
+        return None
 
-    host = get_config("3th_file_storage", "DOMAIN")
+    host = DOMAIN
     if not host:
         raise Exception(gettext("Please configure the third-party file storage domain name"))
 

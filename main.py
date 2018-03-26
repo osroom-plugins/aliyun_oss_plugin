@@ -1,10 +1,8 @@
 # -*-coding:utf-8-*-
 import oss2
-from apps.plugins.aliyun_oss_plugin.config import ENDPOINT, BUCKET_NAME, IS_CNAME, TIME_OUT
+from apps.plugins.aliyun_oss_plugin.config import ENDPOINT, BUCKET_NAME, IS_CNAME, TIME_OUT, ACCESS_KEY, SECRET_KEY
 from apps.plugins.aliyun_oss_plugin.upfile_cloud import alioss_upload, alioss_file_del, alioss_file_rename, \
-    get_file_path
-from apps.plugins.qiniu_cloud_plugin.config import ACCESS_KEY, SECRET_KEY
-
+    get_file_url
 
 __author__ = "Allen Woo"
 auth = oss2.Auth(ACCESS_KEY, SECRET_KEY)
@@ -33,8 +31,8 @@ def main(**kwargs):
 
     elif kwargs.get("action") == "rename":
         data = alioss_file_rename(alioss, **kwargs)
-    elif kwargs.get("action") == "get_file_path":
-        data = get_file_path(alioss, **kwargs)
+    elif kwargs.get("action") == "get_file_url":
+        data = get_file_url(**kwargs)
     else:
         assert False
     return data
