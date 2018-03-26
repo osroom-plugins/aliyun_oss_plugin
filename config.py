@@ -1,25 +1,57 @@
 # -*-coding:utf-8-*-
 
 __author__ = "Allen Woo"
-'''
-验证
-'''
-ACCESS_KEY = "<Your AK>"
-SECRET_KEY = "<Your SK>"
+PLUGIN_NAME = "aliyun_oss_plugin"
 
-# 如果你的存储访问绑定的是自己的域名, 则开启, 即IS_CNAME改为True
-IS_CNAME = False
-# 访问EndPoint, 阿里云提供的区域访问EndPoint　或者　绑定的自己的域名
-ENDPOINT = "oss-cn-shenzhen.aliyuncs.com"
-BUCKET_NAME = "<Your bucket name>"
-TIME_OUT = 60 # 超时连接秒
+CONFIG = {
+    "ACCESS_KEY":{
+        "info":"ACCESS KEY ID",
+        "value_type":"string",
+        "value":"",
+        "reactivate":True
+    },
+    "SECRET_KEY":{
+        "info":"SECRET KEY",
+        "value_type":"password",
+        "value":"",
+        "reactivate":True
+    },
+    "IS_CNAME":{
+        "info":"是否绑定了自定义域名(自己的)",
+        "value_type":"bool",
+        "value":False,
+        "reactivate":True
+    },
+    "ENDPOINT":{
+        "info":"EndPoint, 阿里云提供的区域访问EndPoint或者是自己绑定的域名",
+        "value_type":"string",
+        "value":"oss-cn-shenzhen.aliyuncs.com",
+        "reactivate":True
+    },
+    "BUCKET_NAME":{
+        "info":"BUCKET 名称",
+        "value_type":"string",
+        "value":"osroom-test2",
+        "reactivate":True
+    },
+    "TIME_OUT":{
+        "info":"连接超时",
+        "value_type":"int",
+        "value":60,
+        "reactivate":True
+    },
+    "LOCAL_TEMP_FOLDER":{
+        "info":"本地服务器临时保存目录名, 将建立在static目录下(可以不修改此项)",
+        "value_type":"string",
+        "value":"upload_temp",
+        "reactivate":False
+    },
+    "DOMAIN":{
+        "info":"域名(带http://或https://):访问上传的文件的域名",
+        "value_type":"string",
+        "value":"https://osroom-test2.oss-cn-shenzhen.aliyuncs.com",
+        "reactivate":False
+    }
 
-# 自己服务器的临时存储目录, 可以不修改
-LOCAL_TEMP_FOLDER = "upload_temp"
-
-'''
-访问
-'''
-
-DOMAIN = "https://osroom-test.oss-cn-shenzhen.aliyuncs.com"
+}
 

@@ -1,6 +1,8 @@
 # -*-coding:utf-8-*-
 from flask_babel import gettext
-from apps.plugins.aliyun_oss_plugin.config import BUCKET_NAME, DOMAIN
+
+from apps.core.plug_in.config_process import get_plugin_config
+from apps.plugins.aliyun_oss_plugin.config import PLUGIN_NAME
 from apps.plugins.aliyun_oss_plugin.upfile_local import local_file_del, upload_to_local, fileup_base_64
 
 __author__ = "Allen Woo"
@@ -47,7 +49,8 @@ def alioss_upload(alioss, **kwargs):
     # 删除本地临时文件
     local_file_del(localfile_path)
 
-    result = {"key": key, "type": "aliyun", "bucket_name": BUCKET_NAME}
+    result = {"key": key, "type": "aliyun",
+              "bucket_name": get_plugin_config(PLUGIN_NAME, "BUCKET_NAME")}
     return result
 
 
@@ -74,7 +77,7 @@ def alioss_save_file(alioss, **kwargs):
     # 删除本地临时文件
     local_file_del(localfile_path)
 
-    result = {"key": filename, "type": "aliyun", "bucket_name": BUCKET_NAME}
+    result = {"key": filename, "type": "aliyun", "bucket_name": get_plugin_config(PLUGIN_NAME, "BUCKET_NAME")}
     return result
 
 
@@ -108,7 +111,7 @@ def alioss_file_rename(alioss, **kwargs):
     new_filename = kwargs.get("new_filename")
     if isinstance(path_obj, dict) and "key" in path_obj:
 
-        alioss.copy_object(BUCKET_NAME, path_obj["key"], new_filename)
+        alioss.copy_object(get_plugin_config(PLUGIN_NAME, "BUCKET_NAME"), path_obj["key"], new_filename)
 
         return True
     else:
@@ -125,9 +128,10 @@ def get_file_url(**kwargs):
     # path_obj:上传文件时返回的那个result格式的字典
     path_obj = kwargs.get("path_obj")
     if isinstance(path_obj, dict) and "key" in path_obj:
-        if not DOMAIN:
+        domain = get_plugin_config(PLUGIN_NAME, "DOMAIN")
+        if not domain:
             raise Exception(gettext("Please configure the third-party file storage domain name"))
 
-        url = "{}/{}".format(DOMAIN, path_obj["key"])
+        url = "{}/{}".format(domain, path_obj["key"])
         return url
     return None
