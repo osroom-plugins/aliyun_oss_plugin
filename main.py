@@ -4,7 +4,7 @@ import oss2
 from apps.core.plug_in.config_process import import_plugin_config, get_plugin_config
 from apps.plugins.aliyun_oss_plugin.config import CONFIG, PLUGIN_NAME
 from apps.plugins.aliyun_oss_plugin.upfile_cloud import alioss_upload, alioss_file_del, alioss_file_rename, \
-    get_file_url, alioss_save_file
+    get_file_url
 
 __author__ = "Allen Woo"
 import_plugin_config(PLUGIN_NAME, CONFIG)
@@ -17,8 +17,6 @@ alioss = oss2.Bucket(auth=auth,
                       connect_timeout = get_plugin_config(PLUGIN_NAME, "TIME_OUT")
                      )
 
-
-
 def main(**kwargs):
 
     '''
@@ -29,11 +27,10 @@ def main(**kwargs):
     '''
     if kwargs.get("action") == "upload":
         data = alioss_upload(alioss, **kwargs)
-    elif kwargs.get("action") == "save_file":
-        data = alioss_save_file(alioss, **kwargs)
+    elif kwargs.get("action") == "copy_file":
+        data = alioss_upload(alioss, **kwargs)
     elif kwargs.get("action") == "delete":
         data = alioss_file_del(alioss, **kwargs)
-
     elif kwargs.get("action") == "rename":
         data = alioss_file_rename(alioss, **kwargs)
     elif kwargs.get("action") == "get_file_url":
