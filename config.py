@@ -7,13 +7,13 @@ CONFIG = {
     "ACCESS_KEY":{
         "info":"ACCESS KEY ID",
         "value_type":"string",
-        "value":"",
+        "value":"<Your AK ID>",
         "reactivate":True
     },
     "SECRET_KEY":{
         "info":"SECRET KEY",
         "value_type":"password",
-        "value":"",
+        "value":"<Your SK>",
         "reactivate":True
     },
     "IS_CNAME":{
@@ -25,13 +25,13 @@ CONFIG = {
     "ENDPOINT":{
         "info":"EndPoint, 阿里云提供的区域访问EndPoint或者是自己绑定的域名",
         "value_type":"string",
-        "value":"oss-cn-shenzhen.aliyuncs.com",
+        "value":"如oss-cn-shenzhen.aliyuncs.com",
         "reactivate":True
     },
     "BUCKET_NAME":{
         "info":"BUCKET 名称",
         "value_type":"string",
-        "value":"osroom-test2",
+        "value":"如osroom-test2",
         "reactivate":True
     },
     "TIME_OUT":{
@@ -49,7 +49,7 @@ CONFIG = {
     "DOMAIN":{
         "info":"域名(带http://或https://):访问上传的文件的域名",
         "value_type":"string",
-        "value":"https://osroom-test2.oss-cn-shenzhen.aliyuncs.com",
+        "value":"如https://osroom-test2.oss-cn-shenzhen.aliyuncs.com",
         "reactivate":False
     }
 
