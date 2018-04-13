@@ -61,7 +61,7 @@ def alioss_file_del(alioss, **kwargs):
 
     # file_url_obj:上传文件时返回的那个result格式的字典
     file_url_obj = kwargs.get("file_url_obj")
-    if isinstance(file_url_obj, dict) and "key" in file_url_obj:
+    if isinstance(file_url_obj, dict) and "key" in file_url_obj and file_url_obj["key"]:
 
         alioss.delete_object(file_url_obj["key"])
 
