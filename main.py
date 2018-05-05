@@ -1,6 +1,5 @@
 # -*-coding:utf-8-*-
 import oss2
-
 from apps.core.plug_in.config_process import import_plugin_config, get_plugin_config
 from apps.plugins.aliyun_oss_plugin.config import CONFIG, PLUGIN_NAME
 from apps.plugins.aliyun_oss_plugin.upfile_cloud import alioss_upload, alioss_file_del, alioss_file_rename, \
